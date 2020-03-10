@@ -1,0 +1,2 @@
+# elisplib
+Custom elisp functions
