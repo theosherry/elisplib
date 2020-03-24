@@ -6,4 +6,15 @@ configured in ~/.ssh/config"
 	(explicit-shell-file-name "/bin/bash"))
     (shell)))
 
+(defun my-ssh-sudo-open (alias)
+  "Open a remote file on machine specified by alias and its configuration in ~.ssh/config."
+  (interactive "MRemote alias: ")
+  (let ((prepend-s (format "/ssh:%s|sudo::" alias)))
+    (minibuffer-with-setup-hook
+	(lambda ()
+	  (delete-minibuffer-contents)
+	  (insert prepend-s))
+      (call-interactively #'find-file))))
+    
 (provide 'my-ssh)
+(provide 'my-ssh-sudo-open)
