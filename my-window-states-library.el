@@ -1,7 +1,6 @@
 ;; Daily planning
 
 ;; Use this command to save the current window state to the specfied file
-
 ;; (with-temp-file
 ;;   "~/.emacs.d/my_libraries/daily_planning.winstate"
 ;;   (print (window-state-get (frame-root-window) t) (current-buffer)))
@@ -20,30 +19,30 @@
     (window-state-put (read (current-buffer))) (frame-root-window)))
 
 
-(provide 'my-start-daily-planning)
-
-(defvar winstack-stack '()
+(defvar --winstack-stack '()
   "A Stack holding window configurations.
-Use `winstack-push' and
-`winstack-pop' to modify it.")
+Use `my-winstack-push' and
+`my-winstack-pop' to modify it.")
 
-(defun winstack-push()
-  "Push the current window configuration onto `winstack-stack'."
+(defun my-winstack-push()
+  "Push the current window configuration onto `--winstack-stack'."
   (interactive)
-  (if (and (window-configuration-p (first winstack-stack))
-         (compare-window-configurations (first winstack-stack) (current-window-configuration)))
+  (if (and (window-configuration-p (first --winstack-stack))
+           (compare-window-configurations (first --winstack-stack)
+					  (current-window-configuration)))
       (message "Current config already pushed")
-    (progn (push (current-window-configuration) winstack-stack)
-           (message (concat "pushed " (number-to-string
-                                       (length (window-list (selected-frame)))) " frame config")))))
+    (progn (push (current-window-configuration) --winstack-stack)
+           (message (concat "pushed "
+			    (number-to-string
+                             (length (window-list (selected-frame))))
+			    " frame config")))))
 
-(defun winstack-pop()
-  "Pop the last window configuration off `winstack-stack' and apply it."
+(defun my-winstack-pop()
+  "Pop the last window configuration off `--winstack-stack' and apply it."
   (interactive)
-  (if (first winstack-stack)
-      (progn (set-window-configuration (pop winstack-stack))
+  (if (first --winstack-stack)
+      (progn (set-window-configuration (pop --winstack-stack))
              (message "popped"))
     (message "End of window stack")))
 
-(provide 'winstack-push)
-(provide 'winstack-pop)
+(provide 'my-window-states-library)

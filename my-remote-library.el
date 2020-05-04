@@ -16,5 +16,4 @@ configured in ~/.ssh/config"
 	  (insert prepend-s))
       (call-interactively #'find-file))))
     
-(provide 'my-ssh)
-(provide 'my-ssh-sudo-open)
+(provide 'my-remote-library)

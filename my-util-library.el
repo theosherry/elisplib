@@ -9,4 +9,4 @@
 	region)
      ""))
 
-(provide 'my-cut-selected-text)
+(provide 'my-util-library)

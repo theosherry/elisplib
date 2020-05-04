@@ -1,4 +1,4 @@
-(require 'my-cut-selected-text  "my_util.el")
+(require 'my-util-library  "my-util-library.el")
 
 (defun my-time-note (beginning end title)
   "In org-mode, insert a heading with a specified title and current timestamp.
@@ -28,6 +28,4 @@ If a region is selected, this function will wrap that region in a header."
   (org-mobile-pull)
   (org-mobile-push))
 
-(provide 'my-time-note)
-(provide 'my-time-stamp)
-(provide 'my-mobile-org-sync)
+(provide 'my-org-library)

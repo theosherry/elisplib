@@ -15,4 +15,4 @@
 </html>"))
     (insert shebang)))
 
-(provide 'my-html-shebang)
+(provide 'my-html-library)
