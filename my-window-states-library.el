@@ -15,7 +15,7 @@
   (org-agenda-list)
   (with-temp-buffer
     (insert-file-contents
-     (locate-user-emacs-file "my_libraries/daily_planning.winstate"))
+     (locate-user-emacs-file "my-libraries/daily_planning.winstate"))
     (window-state-put (read (current-buffer))) (frame-root-window)))
 
 
