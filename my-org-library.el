@@ -28,4 +28,9 @@ If a region is selected, this function will wrap that region in a header."
   (org-mobile-pull)
   (org-mobile-push))
 
+(defun my-convert-to-checkbox (beginning end)
+  "Convert a bullet list under region to a checkbox list."
+  (interactive "r")
+  (replace-regexp "^\\( *-\\)" "\\1 [ ]" nil beginning end))
+
 (provide 'my-org-library)
