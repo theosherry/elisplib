@@ -33,4 +33,21 @@ If a region is selected, this function will wrap that region in a header."
   (interactive "r")
   (replace-regexp "^\\( *-\\)" "\\1 [ ]" nil beginning end))
 
+(defun my-mass-estimate (beginning end)
+  "Set the effort of multiple headings."
+  (interactive "r")
+  (let* ((allowed (org-property-get-allowed-values nil org-effort-property t))
+         (must-match
+	  (and allowed
+	       (not (get-text-property 0 'org-unrestricted
+				       (caar allowed)))))
+         (effort (completing-read "Effort: " allowed nil must-match)))
+    (save-excursion
+      (org-map-entries (lambda ()
+                         (org-set-effort nil effort)
+                         (outline-hide-subtree))
+                       t 'region-start-level)))
+  ;; go back to beginning of region
+  (goto-char (min beginning end)))
+
 (provide 'my-org-library)
