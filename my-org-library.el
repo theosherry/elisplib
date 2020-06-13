@@ -29,10 +29,21 @@ If a region is selected, this function will wrap that region in a header."
   (org-mobile-pull)
   (org-mobile-push))
 
+
+(defun --my-set-and-update-parent-todo-statistics ()
+  "Create statistics cookie if doesn't exist, then update."
+  (outline-back-to-heading)
+  (let* ((heading-title (nth 4 (org-heading-components)))
+         (cleaned-heading-title (replace-regexp-in-string "\\[.*\\]" "" heading-title))
+         (cookied-title (replace-regexp-in-string "$" " [0/0]" cleaned-heading-title)))
+      (org-edit-headline cookied-title))
+  (org-update-statistics-cookies nil))
+
 (defun my-convert-to-checkbox (beginning end)
   "Convert a bullet list under region to a checkbox list."
   (interactive "r")
-  (replace-regexp "^\\( *-\\)" "\\1 [ ]" nil beginning end))
+  (replace-regexp "^\\( *-\\)" "\\1 [ ]" nil beginning end)
+  (--my-set-and-update-parent-todo-statistics))
 
 (defun my-mass-estimate (beginning end)
   "Set the effort of multiple headings."
