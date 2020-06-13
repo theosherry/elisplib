@@ -1,3 +1,4 @@
+(require 'dash)
 (require 'my-util-library  "my-util-library.el")
 
 (defun my-time-note (beginning end title)
@@ -49,5 +50,25 @@ If a region is selected, this function will wrap that region in a header."
                        t 'region-start-level)))
   ;; go back to beginning of region
   (goto-char (min beginning end)))
+
+(defun my-clock-in ()
+  "Clock in and set task to active."
+  (interactive)
+  (org-clock-in)
+  ;; Record the state we'll want to switch back to when marking task
+  ;; inactive (but not done)
+  (org-set-property "Pre-active-state" (org-get-todo-state))
+  (org-todo "ACTIVE"))
+
+(defun my-clock-out ()
+  "Clock out and set task to previously active state."
+  (interactive)
+  (org-clock-out)
+  ;; If previous state is set and not an empty string, use that, otherwise use TODO
+  (let* ((previous-state (org-entry-get nil "Pre-active-state"))
+         (todo-state (or (and (not (-contains? '(nil "") previous-state))
+                              previous-state)
+                         "TODO")))
+    (org-todo todo-state)))
 
 (provide 'my-org-library)
