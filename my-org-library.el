@@ -1,5 +1,6 @@
 ;;; -*- lexical-binding: t -*-
 (require 'dash)
+(require 's)
 (require 'helm)
 (require 'helm-org)
 (require 'org-id)
@@ -33,7 +34,6 @@ If a region is selected, this function will wrap that region in a header."
   (org-agenda-list)
   (org-mobile-pull)
   (org-mobile-push))
-
 
 (defun --my-set-and-update-parent-todo-statistics ()
   "Create statistics cookie if doesn't exist, then update."
@@ -87,6 +87,17 @@ If a region is selected, this function will wrap that region in a header."
                          "TODO")))
     (org-todo todo-state)))
 
+(defun my-make-percent-progress-checklist ()
+  "Insert percent progress checklist under heading at point."
+  (interactive)
+  (end-of-line)
+  (let ((checklist (--reduce-from (concat acc (format "- [ ] %s%%\n" it))
+                                  "\n" '(10 20 30 40 50 60 70 80 90 100))))
+    (insert (s-chomp checklist))
+    (--my-set-and-update-parent-todo-statistics)))
+
+;; wait upon functionality below
+
 (defun --my-heading-from-components (components)
   "Return a basic todo heading from (org-heading-components) result."
   (let* ((level-text (make-string (nth 0 components) ?*))
@@ -115,8 +126,6 @@ instead of point.
                        (cons (--my-heading-from-components (org-heading-components))
                              identifier)))
                    match nil))
-
-(pp (org-link-escape "T1%20finish%20this"))
 
 (defun --my-org-id-link-from-id (id)
   "Make id link to heading from id. Replaces spaces with underscores to avoid
@@ -187,7 +196,6 @@ any blockers + waiting-id."
          (new-waiting-links (--remove-first (string-match waiting-id it) waiting-links)))
     (apply #'org-entry-put-multivalued-property pom --my-waiting-ids-prop new-waiting-ids)
     (apply #'org-entry-put-multivalued-property pom --my-waiting-links-prop new-waiting-links)))
-
 
 (defun --my-resolve-blocking-to-done-factory(blocking-id)
   "Make a function that wlil handle resolving a blocking/waiting relationship for waiters specified
