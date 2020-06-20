@@ -93,5 +93,20 @@ If a region is selected, this function will wrap that region in a header."
     (insert (s-chomp checklist))
     (--my-set-and-update-parent-todo-statistics)))
 
+(defun my-sort-projects ()
+  "Sort projects by tag (alphabetically but you can add different sorting
+functions if you like)."
+  (interactive)
+  (cl-flet ((key-func (lambda () (nth 5 (org-heading-components)))))
+    (goto-char 0)
+    (newline)
+    (goto-char 0)
+    (org-sort-entries t ?f
+		      #'key-func
+		      #'string-lessp)
+    (goto-char 0)
+    (kill-line)
+    (evil-close-folds)))
+
 (provide 'my-org-library)
 
