@@ -15,4 +15,21 @@
 </html>"))
     (insert shebang)))
 
+(defun my-svg-shebang ()
+  "Insert svg markup."
+  (interactive)
+  (let ((shebang "<svg version=\"1.1\"
+  baseProfile=\"full\"
+  width=\"320\" height=\"320\"
+  xmlns=\"http://www.w3.org/2000/svg\">
+</svg>"))
+    (insert shebang)))
+
+
+(defun my-html-format ()
+  "Rudimentary html formatting."
+  (interactive)
+  (sgml-pretty-print 0 (buffer-size))
+  (indent-region 0 (buffer-size)))
+
 (provide 'my-html-library)
