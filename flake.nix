@@ -10,25 +10,30 @@
 
 
   outputs = { self, nixpkgs, flake-utils }:
-  flake-utils.lib.simpleFlake {
-    inherit self nixpkgs;
-    name = "theo-elisplib";
+  let
     overlay = final: prev: {
-      theo-elisplib = {
-        theo-elisplib = with final; (emacs27Packages.melpaBuild {
-          pname   = "my-libraries";
-          ename   = "my-libraries";
-          version = "0.10";
-          recipe  = builtins.toFile "recipe" ''
+      theoNix.elisplib = with final; (emacs27Packages.melpaBuild {
+        pname   = "my-libraries";
+        ename   = "my-libraries";
+        version = "0.10";
+        recipe  = builtins.toFile "recipe" ''
             (my-libraries :fetcher github
             :repo "theosherry/elisplib"
             :files (:defaults "*.winstate"))
-          '';
+        '';
 
-          src = self;
-        });
-      };
+        src = self;
+      });
     };
-  };
+    sysSpecific = flake-utils.lib.eachDefaultSystem( system:
+    let
+      pkgs = import nixpkgs {
+        inherit system;
+        overlays = [ overlay ];
+      };
+      packages = { elisplib = pkgs.theoNix.elisplib; };
+      defaultPackage =  packages.elisplib;
+    in { inherit packages defaultPackage; });
+  in { inherit overlay; } // sysSpecific;
 }
 
